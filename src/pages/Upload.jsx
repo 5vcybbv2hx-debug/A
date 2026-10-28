@@ -5,7 +5,7 @@ import { base44 } from '@/api/base44Client';
 import { shrinkImage } from '@/lib/constants';
 import UploadReview from '@/components/UploadReview';
 import BackHeader from '@/components/BackHeader';
-import { freistellen, alsPngDatei } from '@/lib/cutout';
+import { teilAufnehmen } from '@/lib/teilAufnehmen';
 import { cn } from '@/lib/utils';
 
 const STATUS_TEXT = {
@@ -57,38 +57,10 @@ export default function Upload() {
         const entry = eintraege[cursor];
         cursor += 1;
         try {
-          update(entry.key, { status: 'laedt' });
-          const klein = await shrinkImage(entry.file, 1200);
-          const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file: klein });
-          const created = await base44.entities.Kleidungsstueck.create({
-            name: 'Neues Teil',
-            foto_original: file_uri,
-            verarbeitungs_status: 'hochgeladen',
-            status: 'Aktiv',
-            favorit: false,
-            nutzungszaehler: 0,
+          const item = await teilAufnehmen(entry.file, (phase, itemId) => {
+            update(entry.key, { status: phase, itemId });
           });
-          update(entry.key, { status: 'freistellen', itemId: created.id });
-
-          // Echtes Freistellen auf dem Gerät: keine Credits, echter Alphakanal.
-          let ohneFreistellung = false;
-          try {
-            const png = alsPngDatei(await freistellen(klein));
-            const { file_uri: png_uri } = await base44.integrations.Core.UploadPrivateFile({ file: png });
-            await base44.entities.Kleidungsstueck.update(created.id, {
-              foto_freigestellt: png_uri,
-              verarbeitungs_status: 'freigestellt',
-            });
-          } catch (_e) {
-            // Ohne Freistellung bleibt nur das Originalfoto – das Tagging läuft trotzdem.
-            ohneFreistellung = true;
-            update(entry.key, { ohneFreistellung: true });
-          }
-
-          update(entry.key, { status: 'verarbeitung' });
-          const res = await base44.functions.invoke('processClothingImage', { item_id: created.id });
-          if (res.data?.error) throw new Error(res.data.error);
-          ergebnisse.push(res.data.item);
+          ergebnisse.push(item);
           update(entry.key, { status: 'fertig' });
         } catch (_e) {
           update(entry.key, { status: 'fehler' });

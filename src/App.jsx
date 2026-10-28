@@ -43,6 +43,8 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
+      {/* Der Erststart steht für sich, ohne Navigationsleiste. */}
+      <Route path="/start" element={<Erststart />} />
       <Route element={<Layout />}>
         <Route path="/" element={<Willkommen />} />
         <Route path="/heute" element={<Heute />} />

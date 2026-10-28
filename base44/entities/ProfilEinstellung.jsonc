@@ -45,6 +45,18 @@
     "widmung": {
       "type": "string",
       "title": "Widmung"
+    },
+    "erststart_schritt": {
+      "type": "number",
+      "title": "Erststart: letzter Schritt"
+    },
+    "erststart_fertig": {
+      "type": "boolean",
+      "title": "Erststart abgeschlossen"
+    },
+    "erststart_uebersprungen": {
+      "type": "boolean",
+      "title": "Erststart übersprungen"
     }
   }
 }

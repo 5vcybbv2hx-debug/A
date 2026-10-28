@@ -11,6 +11,7 @@ const PREVIEW = [
 
 export default function Willkommen() {
   const [stats, setStats] = useState({ teile: 0, outfits: 0, looks: 0 });
+  const [hatBasis, setHatBasis] = useState(false);
   const [widmung, setWidmung] = useState('Für A, mit Liebe');
   const [geladen, setGeladen] = useState(false);
 
@@ -21,10 +22,12 @@ export default function Willkommen() {
       base44.entities.Outfit.count({}),
       base44.entities.TrageProtokoll.count({}),
       base44.entities.ProfilEinstellung.filter({}, { limit: 1 }),
+      base44.entities.Basismodell.count({}),
     ])
-      .then(([teile, outfits, looks, profilPage]) => {
+      .then(([teile, outfits, looks, profilPage, basis]) => {
         if (!alive) return;
         setStats({ teile, outfits, looks });
+        setHatBasis(basis > 0);
         const text = profilPage.items?.[0]?.widmung;
         if (text) setWidmung(text);
       })
@@ -36,6 +39,9 @@ export default function Willkommen() {
 
   const [ersteZeile, ...rest] = widmung.split(',');
   const zweiteZeile = rest.join(',').trim();
+
+  // Ohne Basisfoto und ohne Teile ist der geführte Erststart der sinnvollste Weg.
+  const neu = geladen && stats.teile === 0 && !hatBasis;
 
   const kacheln = [
     { label: 'Teile', value: stats.teile },
@@ -92,15 +98,15 @@ export default function Willkommen() {
 
         <div className="mt-12 flex flex-col items-center gap-4">
           <Link
-            to="/schrank"
+            to={neu ? '/start' : '/schrank'}
             className="group flex min-h-[52px] w-full max-w-sm items-center justify-center gap-2 rounded-full bg-primary px-8 text-[15px] text-primary-foreground transition-transform active:scale-[0.99]"
           >
-            In den Schrank
+            {neu ? 'Schrank einrichten' : 'In den Schrank'}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={1.8} />
           </Link>
-          {geladen && stats.teile === 0 && (
-            <Link to="/upload" className="text-[12px] text-gold underline decoration-gold/40 underline-offset-4">
-              Erstes Teil hinzufügen
+          {neu && (
+            <Link to="/heute" className="text-[12px] text-gold underline decoration-gold/40 underline-offset-4">
+              Erst mal umsehen
             </Link>
           )}
           <p className="text-[11px] tracking-wide text-muted-foreground">Alle Fotos bleiben privat.</p>

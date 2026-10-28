@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Moon, Shirt, Sparkles, LayoutGrid, User, Luggage } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { vorwaermen } from '@/lib/cutout';
+import { useFarbschema } from '@/lib/theme';
 
 const VORWAERM_SCHLUESSEL = 'a-freistellen-modell';
 
@@ -57,13 +58,7 @@ export default function Layout() {
     };
   }, []);
 
-  useEffect(() => {
-    const gespeichert = localStorage.getItem('aura-theme');
-    const dunkel = gespeichert
-      ? gespeichert === 'dark'
-      : window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.classList.toggle('dark', dunkel);
-  }, []);
+  useFarbschema();
 
   return (
     <div className="min-h-screen bg-background text-foreground">

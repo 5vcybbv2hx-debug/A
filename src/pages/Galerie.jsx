@@ -89,7 +89,7 @@ export default function Galerie() {
             type="button"
             onClick={() => setTab(t.key)}
             className={cn(
-              'min-h-[40px] rounded-full text-[12px] transition-colors',
+              'min-h-[44px] rounded-full text-[12px] transition-colors',
               tab === t.key ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
             )}
           >

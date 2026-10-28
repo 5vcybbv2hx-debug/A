@@ -203,6 +203,9 @@ export default function Studio() {
             view={view}
             items={selectedItems}
             basismodellFoto={basis?.foto}
+            basismodellFotoFreigestellt={basis?.foto_freigestellt}
+            zonen={basis?.zonen}
+            seitenverhaeltnis={basis?.seitenverhaeltnis}
             tryonBild={cacheGueltig ? render.bild : null}
             rendering={rendering}
             onRequestTryOn={() => anziehen(false)}
@@ -216,7 +219,7 @@ export default function Studio() {
                 type="button"
                 onClick={() => setView(v.key)}
                 className={cn(
-                  'min-h-[40px] rounded-full text-[12px] transition-colors',
+                  'min-h-[44px] rounded-full text-[12px] transition-colors',
                   view === v.key ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
                 )}
               >
@@ -226,7 +229,7 @@ export default function Studio() {
           </div>
 
           <div className="mt-3 flex items-center gap-2">
-            <div className="flex min-h-[42px] flex-1 items-center gap-2 rounded-full border border-border bg-card px-3">
+            <div className="flex min-h-[44px] flex-1 items-center gap-2 rounded-full border border-border bg-card px-3">
               <UserRound className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
               <select
                 value={basisId}
@@ -296,7 +299,7 @@ export default function Studio() {
                       type="button"
                       onClick={() => setForm((f) => ({ ...f, anlass: f.anlass === a ? '' : a }))}
                       className={cn(
-                        'min-h-[34px] rounded-full border px-3 text-[12px]',
+                        'min-h-[44px] rounded-full border px-3 text-[12px]',
                         form.anlass === a ? 'border-gold/60 bg-gold/10' : 'border-border text-muted-foreground'
                       )}
                     >
@@ -314,7 +317,7 @@ export default function Studio() {
                       type="button"
                       onClick={() => setForm((f) => ({ ...f, saison: f.saison === s ? '' : s }))}
                       className={cn(
-                        'min-h-[34px] rounded-full border px-3 text-[12px]',
+                        'min-h-[44px] rounded-full border px-3 text-[12px]',
                         form.saison === s ? 'border-gold/60 bg-gold/10' : 'border-border text-muted-foreground'
                       )}
                     >

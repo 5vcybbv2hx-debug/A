@@ -194,7 +194,7 @@ export default function Heute() {
                 <button
                   type="button"
                   onClick={() => getragen(outfit)}
-                  className="flex min-h-[40px] shrink-0 items-center gap-1.5 rounded-full bg-primary px-4 text-[12px] text-primary-foreground"
+                  className="flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-full bg-primary px-4 text-[12px] text-primary-foreground"
                 >
                   <Check className="h-3.5 w-3.5" /> Ja
                 </button>
@@ -213,7 +213,7 @@ export default function Heute() {
               type="button"
               onClick={() => setAnlass(a)}
               className={cn(
-                'min-h-[38px] rounded-full border px-4 text-[13px] transition-colors',
+                'min-h-[44px] rounded-full border px-4 text-[13px] transition-colors',
                 anlass === a ? 'border-gold/60 bg-gold/10' : 'border-border bg-card text-muted-foreground'
               )}
             >
@@ -258,7 +258,7 @@ export default function Heute() {
                 <button
                   type="button"
                   onClick={() => fuerMorgenPlanen(v)}
-                  className="mt-3 min-h-[38px] w-full rounded-full border border-gold/50 text-[12px] text-foreground"
+                  className="mt-3 min-h-[44px] w-full rounded-full border border-gold/50 text-[12px] text-foreground"
                 >
                   Für morgen planen
                 </button>

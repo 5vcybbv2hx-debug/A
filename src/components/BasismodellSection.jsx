@@ -2,6 +2,8 @@ import { useRef, useState } from 'react';
 import { Camera, Loader2, Star, Trash2, Sparkles } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { shrinkImage } from '@/lib/constants';
+import { freistellen, alsPngDatei } from '@/lib/cutout';
+import { kalibriereZonen } from '@/lib/kalibrierung';
 import FileImage from '@/components/FileImage';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
@@ -10,6 +12,7 @@ export default function BasismodellSection({ modelle, onChanged }) {
   const [busy, setBusy] = useState(false);
   const [varianten, setVarianten] = useState([]);
   const [fehler, setFehler] = useState('');
+  const [status, setStatus] = useState('');
   const kiRef = useRef(null);
   const originalRef = useRef(null);
 
@@ -38,22 +41,54 @@ export default function BasismodellSection({ modelle, onChanged }) {
     setBusy(false);
   };
 
+  // Aus dem Originalfoto wird zusätzlich eine freigestellte Fassung erzeugt.
+  // Aus deren Alphamaske werden die Körperzonen gemessen, damit die Kleidung
+  // in der Ansicht "Auf mir" von Anfang an richtig sitzt.
   const originalUebernehmen = async (file) => {
     if (!file) return;
     setBusy(true);
     setFehler('');
+    setStatus('Foto wird gespeichert …');
     try {
-      const foto = await hochladen(file);
+      const klein = await shrinkImage(file, 1200);
+      const foto = await hochladen(klein);
+
+      let fotoFreigestellt = null;
+      let zonen = null;
+      let seitenverhaeltnis = null;
+
+      try {
+        setStatus('Wird freigestellt, das dauert beim ersten Mal etwa eine Minute …');
+        const png = await freistellen(klein, (_key, aktuell, gesamt) => {
+          if (gesamt > 0) {
+            setStatus(`Wird freigestellt … ${Math.round((aktuell / gesamt) * 100)} %`);
+          }
+        });
+        fotoFreigestellt = await hochladen(alsPngDatei(png, 'basisfoto-freigestellt.png'));
+        const messung = await kalibriereZonen(png);
+        zonen = messung.zonen;
+        seitenverhaeltnis = messung.seitenverhaeltnis;
+        setStatus(messung.gemessen ? 'Körperzonen gemessen.' : 'Körperzonen geschätzt.');
+      } catch (_e) {
+        // Ohne Freistellung bleibt das Original nutzbar, die Zonen greifen dann auf Standardwerte.
+        setStatus('Ohne Freistellung gespeichert.');
+      }
+
       await base44.entities.Basismodell.create({
         foto,
+        foto_freigestellt: fotoFreigestellt,
+        zonen,
+        seitenverhaeltnis,
         pose_beschreibung: 'Originalfoto',
         herkunft: 'original_foto',
         ist_anker: !hatAnker,
         aktiv: true,
       });
+      setStatus('');
       onChanged();
     } catch (_e) {
       setFehler('Das Foto konnte nicht gespeichert werden.');
+      setStatus('');
     }
     setBusy(false);
   };
@@ -126,6 +161,13 @@ export default function BasismodellSection({ modelle, onChanged }) {
         das Ergebnis – ein zusammengesetztes Bild aus verschiedenen Fotos wird bewusst nicht erzeugt.
       </p>
 
+      {status && (
+        <p className="mt-3 flex items-center gap-2 rounded-xl border border-gold/30 bg-gold/5 px-3 py-2 text-[11px] text-muted-foreground">
+          {busy && <Loader2 className="h-3 w-3 animate-spin text-gold" />}
+          {status}
+        </p>
+      )}
+
       {fehler && (
         <p className="mt-3 rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-[12px] text-destructive">
           {fehler}
@@ -151,7 +193,7 @@ export default function BasismodellSection({ modelle, onChanged }) {
                     type="button"
                     onClick={() => ankerSetzen(modell.id)}
                     className={cn(
-                      'min-h-[32px] rounded-full px-2.5 text-[10px]',
+                      'min-h-[44px] rounded-full px-3 text-[11px]',
                       modell.ist_anker ? 'text-gold' : 'border border-border text-muted-foreground'
                     )}
                   >
@@ -160,7 +202,7 @@ export default function BasismodellSection({ modelle, onChanged }) {
                   <button
                     type="button"
                     onClick={() => entfernen(modell.id)}
-                    className="flex h-8 w-8 items-center justify-center text-muted-foreground"
+                    className="flex h-11 w-11 items-center justify-center text-muted-foreground"
                     aria-label="Löschen"
                   >
                     <Trash2 className="h-3.5 w-3.5" />

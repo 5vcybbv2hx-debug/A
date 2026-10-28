@@ -143,7 +143,7 @@ export default function Upload() {
               type="button"
               onClick={() => setModus(tab.key)}
               className={cn(
-                'min-h-[40px] rounded-full text-[12px] transition-colors',
+                'min-h-[44px] rounded-full text-[12px] transition-colors',
                 modus === tab.key ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
               )}
             >

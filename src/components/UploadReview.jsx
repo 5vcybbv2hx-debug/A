@@ -56,7 +56,7 @@ export default function UploadReview({ items, onFinished }) {
           type="button"
           onClick={alleUebernehmen}
           disabled={busy}
-          className="min-h-[36px] text-[12px] text-gold disabled:opacity-50"
+          className="min-h-[44px] text-[12px] text-gold disabled:opacity-50"
         >
           {busy ? 'Speichern …' : 'Alle übernehmen'}
         </button>

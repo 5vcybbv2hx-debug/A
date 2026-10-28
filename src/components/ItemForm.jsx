@@ -95,7 +95,7 @@ export default function ItemForm({ value, onChange }) {
               type="button"
               onClick={() => toggleAnlass(a)}
               className={cn(
-                'min-h-[36px] rounded-full border px-3.5 text-[12px] transition-colors',
+                'min-h-[44px] rounded-full border px-3.5 text-[12px] transition-colors',
                 anlaesse.includes(a)
                   ? 'border-gold/60 bg-gold/10 text-foreground'
                   : 'border-border bg-card text-muted-foreground'

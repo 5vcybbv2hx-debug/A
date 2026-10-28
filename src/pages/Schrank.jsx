@@ -88,7 +88,7 @@ export default function Schrank() {
       type="button"
       onClick={() => setAktiv(!aktiv)}
       className={cn(
-        'flex min-h-[36px] shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[13px] transition-colors',
+        'flex min-h-[44px] shrink-0 items-center gap-1.5 rounded-full border px-3.5 text-[13px] transition-colors',
         aktiv ? 'border-gold/60 bg-gold/10 text-foreground' : 'border-border bg-card text-muted-foreground'
       )}
     >

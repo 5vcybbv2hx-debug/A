@@ -45,7 +45,7 @@ export default function PacklisteDetail({ pack, onBack, onChanged }) {
             type="button"
             onClick={() => statusSetzen(status)}
             className={cn(
-              'min-h-[40px] rounded-full text-[12px]',
+              'min-h-[44px] rounded-full text-[12px]',
               pack.status === status ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'
             )}
           >

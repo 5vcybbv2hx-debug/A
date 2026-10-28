@@ -22,7 +22,7 @@ export default function StudioShelf({ items, selectedIds, onToggle }) {
               type="button"
               onClick={() => setSlot(option.value)}
               className={cn(
-                'min-h-[36px] shrink-0 rounded-full border px-3.5 text-[12px] transition-colors',
+                'min-h-[44px] shrink-0 rounded-full border px-3.5 text-[12px] transition-colors',
                 (slot ?? null) === option.value
                   ? 'border-gold/60 bg-gold/10 text-foreground'
                   : 'border-border bg-card text-muted-foreground'

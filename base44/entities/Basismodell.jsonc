@@ -12,6 +12,18 @@
       "type": "string",
       "title": "Foto"
     },
+    "foto_freigestellt": {
+      "type": "string",
+      "title": "Foto freigestellt"
+    },
+    "zonen": {
+      "type": "object",
+      "title": "Körperzonen"
+    },
+    "seitenverhaeltnis": {
+      "type": "number",
+      "title": "Seitenverhältnis"
+    },
     "ist_anker": {
       "type": "boolean",
       "title": "Anker",

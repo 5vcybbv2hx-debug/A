@@ -15,7 +15,7 @@ export default function FilterChips({ options, value, onChange, allLabel = 'Alle
             type="button"
             onClick={() => onChange(option.value)}
             className={cn(
-              'min-h-[36px] shrink-0 rounded-full border px-4 text-[13px] transition-colors',
+              'min-h-[44px] shrink-0 rounded-full border px-4 text-[13px] transition-colors',
               active
                 ? 'border-gold/60 bg-gold/10 text-foreground'
                 : 'border-border bg-card text-muted-foreground hover:text-foreground'

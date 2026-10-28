@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
-import { signedUrl, toPrivateImage, asArray } from '../../shared/aura.ts';
+import { signedUrl, toPrivateImage, asArray, angemeldeterUser } from '../../shared/aura.ts';
 
 const VARIANTEN = [
   { pose: 'frontal stehend', hint: 'frontale Ganzkörperansicht, Kamera auf Augenhöhe' },
@@ -19,7 +19,11 @@ export default async function (req) {
 
     const base44 = createClientFromRequest(req);
     const db = base44.asServiceRole.entities;
-    const profil = (await db.ProfilEinstellung.filter({}, { limit: 1 })).items?.[0] || {};
+    const user = await angemeldeterUser(base44);
+    if (!user) return Response.json({ error: 'Bitte zuerst anmelden.' }, { status: 401 });
+    const profil = asArray(
+      await db.ProfilEinstellung.filter({ created_by: user.email }, { limit: 1 })
+    )[0] || {};
 
     const urls = await Promise.all(foto_uris.map((u) => signedUrl(base44, u, 1800)));
 

@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
-import { asArray, firstOf } from '../../shared/aura.ts';
+import { asArray, firstOf, angemeldeterUser } from '../../shared/aura.ts';
 
 function tageZwischen(start, ende) {
   const s = new Date(start);
@@ -27,13 +27,15 @@ export default async function (req) {
 
     const base44 = createClientFromRequest(req);
     const db = base44.asServiceRole.entities;
+    const user = await angemeldeterUser(base44);
+    if (!user) return Response.json({ error: 'Bitte zuerst anmelden.' }, { status: 401 });
 
     const tage = tageZwischen(startdatum, enddatum || startdatum);
-    const items = asArray(await db.Kleidungsstueck.filter({ status: 'Aktiv' }, { limit: 200 })).filter((i) => i.slot_typ);
+    const items = asArray(await db.Kleidungsstueck.filter({ status: 'Aktiv', created_by: user.email }, { limit: 200 })).filter((i) => i.slot_typ);
     if (items.length < 2) {
       return Response.json({ error: 'Dein Schrank ist noch zu leer für eine Packliste.' }, { status: 400 });
     }
-    const profil = firstOf(await db.ProfilEinstellung.filter({}, { limit: 1 })) || {};
+    const profil = firstOf(await db.ProfilEinstellung.filter({ created_by: user.email }, { limit: 1 })) || {};
 
     const zeilen = items
       .map((i) => `id=${i.id} | ${i.name} | ${i.kategorie}/${i.slot_typ} | ${(i.farben || []).join(', ')} | ${i.muster || 'Unifarben'} | ${i.saison || 'Ganzjahres'} | ${(i.anlaesse || []).join(', ')}`)
@@ -112,6 +114,7 @@ export default async function (req) {
     }
 
     const packliste = await db.Packliste.create({
+      created_by: user.email,
       name: `Reise nach ${ziel}`,
       ziel,
       startdatum,

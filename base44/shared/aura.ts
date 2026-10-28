@@ -67,3 +67,23 @@ export function weatherText(code) {
   if (code >= 95) return 'Gewitter';
   return 'Wechselhaft';
 }
+// --- Zugriffsschutz: jede Funktion arbeitet mit Service-Role, muss also selbst prüfen. ---
+
+export async function angemeldeterUser(base44) {
+  try {
+    const user = await base44.auth.me();
+    return user || null;
+  } catch (_e) {
+    return null;
+  }
+}
+
+export function gehoert(user, record) {
+  if (!user || !record) return false;
+  if (user.role === 'admin') return true;
+  return record.created_by === user.email;
+}
+
+export function keineBerechtigung() {
+  return Response.json({ error: 'Kein Zugriff auf diesen Eintrag.' }, { status: 403 });
+}

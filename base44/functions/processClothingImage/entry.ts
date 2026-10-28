@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
-import { signedUrl, toPrivateImage, KATEGORIEN, SLOTS, MUSTER, SAISONS } from '../../shared/aura.ts';
+import { signedUrl, toPrivateImage, KATEGORIEN, SLOTS, MUSTER, SAISONS, angemeldeterUser, gehoert, keineBerechtigung } from '../../shared/aura.ts';
 
 export default async function (req) {
   try {
@@ -8,11 +8,14 @@ export default async function (req) {
 
     const base44 = createClientFromRequest(req);
     const db = base44.asServiceRole.entities;
+    const user = await angemeldeterUser(base44);
+    if (!user) return Response.json({ error: 'Bitte zuerst anmelden.' }, { status: 401 });
 
     const item = await db.Kleidungsstueck.get(item_id).catch((e) =>
       e.status === 404 ? null : Promise.reject(e)
     );
     if (!item) return Response.json({ error: 'Teil nicht gefunden' }, { status: 404 });
+    if (!gehoert(user, item)) return keineBerechtigung();
     if (!item.foto_original) return Response.json({ error: 'Kein Foto vorhanden' }, { status: 400 });
 
     const url = await signedUrl(base44, item.foto_original, 1800);

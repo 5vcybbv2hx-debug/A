@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
-import { signedUrl, KATEGORIEN, SLOTS, MUSTER, SAISONS, ANLAESSE } from '../../shared/aura.ts';
+import { signedUrl, KATEGORIEN, SLOTS, MUSTER, SAISONS, ANLAESSE, angemeldeterUser } from '../../shared/aura.ts';
 
 export default async function (req) {
   try {
@@ -8,6 +8,8 @@ export default async function (req) {
 
     const base44 = createClientFromRequest(req);
     const db = base44.asServiceRole.entities;
+    const user = await angemeldeterUser(base44);
+    if (!user) return Response.json({ error: 'Bitte zuerst anmelden.' }, { status: 401 });
 
     const url = await signedUrl(base44, foto_uri, 1800);
 
@@ -68,11 +70,13 @@ export default async function (req) {
       nutzungszaehler: 0,
       verarbeitungs_status: 'geprueft',
       foto_original: foto_uri,
+      created_by: user.email,
     }));
 
     const gespeichert = await db.Kleidungsstueck.bulkCreate(neueItems);
 
     const outfit = await db.Outfit.create({
+      created_by: user.email,
       name: erkennung.outfit_name || 'Look vom Foto',
       item_ids: gespeichert.map((i) => i.id),
       anlass: erkennung.anlass || 'Alltag',
@@ -85,6 +89,7 @@ export default async function (req) {
     });
 
     await db.TrageProtokoll.create({
+      created_by: user.email,
       outfit_id: outfit.id,
       outfit_name: outfit.name,
       datum: new Date().toISOString().slice(0, 10),

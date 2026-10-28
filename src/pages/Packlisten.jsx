@@ -3,7 +3,7 @@ import { Loader2, Luggage, Sparkles } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import PacklisteDetail from '@/components/PacklisteDetail';
 import BackHeader from '@/components/BackHeader';
-import { formatDate, todayISO, tomorrowISO } from '@/lib/constants';
+import { formatDate, tomorrowISO } from '@/lib/constants';
 
 export default function Packlisten() {
   const [listen, setListen] = useState([]);

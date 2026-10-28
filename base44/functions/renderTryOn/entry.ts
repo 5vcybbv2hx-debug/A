@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
-import { signedUrl, toPrivateImage, describeItem, signaturOf, asArray, firstOf } from '../../shared/aura.ts';
+import { signedUrl, toPrivateImage, describeItem, signaturOf, asArray, firstOf, angemeldeterUser, gehoert, keineBerechtigung } from '../../shared/aura.ts';
 
 export default async function (req) {
   try {
@@ -9,11 +9,14 @@ export default async function (req) {
 
     const base44 = createClientFromRequest(req);
     const db = base44.asServiceRole.entities;
+    const user = await angemeldeterUser(base44);
+    if (!user) return Response.json({ error: 'Bitte zuerst anmelden.' }, { status: 401 });
 
     const outfit = await db.Outfit.get(outfit_id).catch((e) =>
       e.status === 404 ? null : Promise.reject(e)
     );
     if (!outfit) return Response.json({ error: 'Outfit nicht gefunden' }, { status: 404 });
+    if (!gehoert(user, outfit)) return keineBerechtigung();
     if (!outfit.item_ids?.length) {
       return Response.json({ error: 'Bitte zuerst Kleidungsstücke auswählen.' }, { status: 400 });
     }
@@ -24,8 +27,17 @@ export default async function (req) {
         e.status === 404 ? null : Promise.reject(e)
       );
     }
-    if (!basismodell) basismodell = firstOf(await db.Basismodell.filter({ ist_anker: true }, { limit: 1 }));
-    if (!basismodell) basismodell = firstOf(await db.Basismodell.filter({ aktiv: true }, { limit: 1 }));
+    if (basismodell && !gehoert(user, basismodell)) return keineBerechtigung();
+    if (!basismodell) {
+      basismodell = firstOf(
+        await db.Basismodell.filter({ ist_anker: true, created_by: user.email }, { limit: 1 })
+      );
+    }
+    if (!basismodell) {
+      basismodell = firstOf(
+        await db.Basismodell.filter({ aktiv: true, created_by: user.email }, { limit: 1 })
+      );
+    }
 
     if (!basismodell?.foto) {
       return Response.json(
@@ -44,7 +56,7 @@ export default async function (req) {
       return Response.json({ outfit, gecacht: true });
     }
 
-    const items = asArray(await db.Kleidungsstueck.filter({ id: { $in: outfit.item_ids } }, { limit: 50 }));
+    const items = asArray(await db.Kleidungsstueck.filter({ id: { $in: outfit.item_ids }, created_by: user.email }, { limit: 50 }));
     if (items.length === 0) {
       return Response.json({ error: 'Die Kleidungsstücke wurden nicht gefunden.' }, { status: 400 });
     }

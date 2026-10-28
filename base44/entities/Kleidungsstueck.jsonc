@@ -1,0 +1,133 @@
+{
+  "name": "Kleidungsstueck",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "foto_original": {
+      "type": "string",
+      "title": "Originalfoto"
+    },
+    "foto_freigestellt": {
+      "type": "string",
+      "title": "Freigestelltes Foto"
+    },
+    "kategorie": {
+      "type": "string",
+      "title": "Kategorie",
+      "enum": [
+        "T-Shirt",
+        "Bluse",
+        "Pullover",
+        "Kleid",
+        "Hose",
+        "Rock",
+        "Jacke",
+        "Mantel",
+        "Schuh",
+        "Tasche",
+        "Schmuck",
+        "Accessoire",
+        "Sonstiges"
+      ]
+    },
+    "slot_typ": {
+      "type": "string",
+      "title": "Slot",
+      "enum": [
+        "top",
+        "bottom",
+        "fullbody",
+        "outer",
+        "shoes",
+        "accessory"
+      ]
+    },
+    "farben": {
+      "type": "array",
+      "title": "Farben",
+      "items": {
+        "type": "string"
+      }
+    },
+    "muster": {
+      "type": "string",
+      "title": "Muster",
+      "enum": [
+        "Unifarben",
+        "Gestreift",
+        "Gemustert",
+        "Blumen",
+        "Karriert",
+        "Sonstiges"
+      ]
+    },
+    "saison": {
+      "type": "string",
+      "title": "Saison",
+      "enum": [
+        "Fr\u00fchling",
+        "Sommer",
+        "Herbst",
+        "Winter",
+        "\u00dcbergang",
+        "Ganzjahres"
+      ]
+    },
+    "anlaesse": {
+      "type": "array",
+      "title": "Anl\u00e4sse",
+      "items": {
+        "type": "string"
+      }
+    },
+    "marke": {
+      "type": "string",
+      "title": "Marke"
+    },
+    "groesse": {
+      "type": "string",
+      "title": "Gr\u00f6\u00dfe"
+    },
+    "favorit": {
+      "type": "boolean",
+      "title": "Favorit",
+      "default": false
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Aktiv",
+        "Ausgemustert"
+      ],
+      "default": "Aktiv"
+    },
+    "letzte_nutzung": {
+      "type": "string",
+      "title": "Zuletzt getragen",
+      "format": "date"
+    },
+    "nutzungszaehler": {
+      "type": "number",
+      "title": "Nutzungsz\u00e4hler",
+      "default": 0
+    },
+    "verarbeitungs_status": {
+      "type": "string",
+      "title": "Verarbeitungsstatus",
+      "enum": [
+        "hochgeladen",
+        "freigestellt",
+        "getaggt",
+        "geprueft"
+      ],
+      "default": "hochgeladen"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "name": "Outfit",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "item_ids": {
+      "type": "array",
+      "title": "Teile",
+      "items": {
+        "type": "string"
+      }
+    },
+    "anlass": {
+      "type": "string",
+      "title": "Anlass"
+    },
+    "saison": {
+      "type": "string",
+      "title": "Saison"
+    },
+    "temperatur_min": {
+      "type": "number",
+      "title": "Temperatur min"
+    },
+    "temperatur_max": {
+      "type": "number",
+      "title": "Temperatur max"
+    },
+    "favorit": {
+      "type": "boolean",
+      "title": "Favorit",
+      "default": false
+    },
+    "ki_kommentar": {
+      "type": "string",
+      "title": "KI-Kommentar"
+    },
+    "tryon_bild": {
+      "type": "string",
+      "title": "Anziehbild"
+    },
+    "tryon_basismodell_id": {
+      "type": "string",
+      "title": "Basismodell"
+    },
+    "tryon_item_signatur": {
+      "type": "string",
+      "title": "Signatur der Teile"
+    },
+    "tryon_status": {
+      "type": "string",
+      "title": "Anziehstatus",
+      "enum": [
+        "keins",
+        "wird_gerendert",
+        "fertig",
+        "fehler"
+      ],
+      "default": "keins"
+    },
+    "geplant_fuer": {
+      "type": "string",
+      "title": "Geplant f\u00fcr",
+      "format": "date"
+    },
+    "letzte_nutzung": {
+      "type": "string",
+      "title": "Zuletzt getragen",
+      "format": "date"
+    },
+    "nutzungszaehler": {
+      "type": "number",
+      "title": "Nutzungsz\u00e4hler",
+      "default": 0
+    }
+  }
+}

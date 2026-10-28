@@ -1,0 +1,95 @@
+{
+  "name": "Packliste",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name"
+    },
+    "ziel": {
+      "type": "string",
+      "title": "Ziel"
+    },
+    "startdatum": {
+      "type": "string",
+      "title": "Startdatum",
+      "format": "date"
+    },
+    "enddatum": {
+      "type": "string",
+      "title": "Enddatum",
+      "format": "date"
+    },
+    "item_ids": {
+      "type": "array",
+      "title": "Gepackte Teile",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outfit_ids": {
+      "type": "array",
+      "title": "Outfits",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "title": "Status",
+      "enum": [
+        "Geplant",
+        "Gepackt"
+      ],
+      "default": "Geplant"
+    },
+    "packliste_items": {
+      "type": "array",
+      "title": "Checkliste",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "kategorie": {
+            "type": "string"
+          },
+          "erledigt": {
+            "type": "boolean"
+          },
+          "item_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tage": {
+      "type": "array",
+      "title": "Tagesplan",
+      "items": {
+        "type": "object",
+        "properties": {
+          "datum": {
+            "type": "string"
+          },
+          "outfit_id": {
+            "type": "string"
+          },
+          "outfit_name": {
+            "type": "string"
+          },
+          "item_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "kommentar": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

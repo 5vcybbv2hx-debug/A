@@ -1,0 +1,31 @@
+{
+  "name": "TrageProtokoll",
+  "type": "object",
+  "properties": {
+    "outfit_id": {
+      "type": "string",
+      "title": "Outfit"
+    },
+    "outfit_name": {
+      "type": "string",
+      "title": "Outfitname"
+    },
+    "datum": {
+      "type": "string",
+      "title": "Datum",
+      "format": "date"
+    },
+    "anlass": {
+      "type": "string",
+      "title": "Anlass"
+    },
+    "wetter": {
+      "type": "string",
+      "title": "Wetter"
+    },
+    "kommentar": {
+      "type": "string",
+      "title": "Kommentar"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "ProfilEinstellung",
+  "type": "object",
+  "properties": {
+    "groesse_oben": {
+      "type": "string",
+      "title": "Gr\u00f6\u00dfe oben"
+    },
+    "groesse_unten": {
+      "type": "string",
+      "title": "Gr\u00f6\u00dfe unten"
+    },
+    "schuhgroesse": {
+      "type": "string",
+      "title": "Schuhgr\u00f6\u00dfe"
+    },
+    "lieblingsfarben": {
+      "type": "array",
+      "title": "Lieblingsfarben",
+      "items": {
+        "type": "string"
+      }
+    },
+    "no_go_farben": {
+      "type": "array",
+      "title": "No-Go-Farben",
+      "items": {
+        "type": "string"
+      }
+    },
+    "style_beschreibung": {
+      "type": "string",
+      "title": "Stil"
+    },
+    "koerper_beschreibung": {
+      "type": "string",
+      "title": "K\u00f6rperbeschreibung"
+    },
+    "widmung": {
+      "type": "string",
+      "title": "Widmung"
+    }
+  }
+}

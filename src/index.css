@@ -4,82 +4,104 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    /* Warme, sandige Neutraltöne */
+    --background: 36 38% 96%;
+    --foreground: 28 12% 16%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 28 12% 16%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --font-heading: ui-sans-serif, system-ui, sans-serif;
-    --font-body: ui-sans-serif, system-ui, sans-serif;
-    --font-display: ui-sans-serif, system-ui, sans-serif;
+    --popover-foreground: 28 12% 16%;
+    --primary: 34 32% 40%;
+    --primary-foreground: 40 50% 98%;
+    --secondary: 36 26% 92%;
+    --secondary-foreground: 28 12% 20%;
+    --muted: 36 24% 93%;
+    --muted-foreground: 30 8% 44%;
+    --accent: 36 30% 91%;
+    --accent-foreground: 28 12% 20%;
+    --destructive: 4 58% 46%;
+    --destructive-foreground: 40 50% 98%;
+    --border: 34 20% 87%;
+    --input: 34 20% 87%;
+    --ring: 35 34% 52%;
+
+    /* Gold: einziger Akzent */
+    --gold: 35 34% 50%;
+    --gold-soft: 38 38% 80%;
+    --gold-foreground: 40 55% 98%;
+
+    /* helle Fläche für freigestellte Wäschestücke (in beiden Modi hell) */
+    --foto: 36 26% 93%;
+    --foto-foreground: 28 12% 22%;
+
+    --chart-1: 35 34% 50%;
+    --chart-2: 30 18% 62%;
+    --chart-3: 28 12% 38%;
+    --chart-4: 40 30% 72%;
+    --chart-5: 24 20% 55%;
+
+    --radius: 1rem;
+
+    --font-heading: "Instrument Serif", "Times New Roman", serif;
+    --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Instrument Serif", "Times New Roman", serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --sidebar-background: 36 30% 94%;
+    --sidebar-foreground: 28 12% 20%;
+    --sidebar-primary: 34 32% 40%;
+    --sidebar-primary-foreground: 40 50% 98%;
+    --sidebar-accent: 36 26% 90%;
+    --sidebar-accent-foreground: 28 12% 18%;
+    --sidebar-border: 34 18% 86%;
+    --sidebar-ring: 35 34% 52%;
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --background: 26 10% 8%;
+    --foreground: 36 18% 91%;
+    --card: 26 9% 12%;
+    --card-foreground: 36 18% 91%;
+    --popover: 26 9% 12%;
+    --popover-foreground: 36 18% 91%;
+    --primary: 38 28% 62%;
+    --primary-foreground: 26 12% 10%;
+    --secondary: 26 8% 16%;
+    --secondary-foreground: 36 16% 88%;
+    --muted: 26 7% 16%;
+    --muted-foreground: 34 8% 62%;
+    --accent: 26 8% 18%;
+    --accent-foreground: 36 16% 90%;
+    --destructive: 4 50% 52%;
+    --destructive-foreground: 26 12% 10%;
+    --border: 28 8% 21%;
+    --input: 28 8% 21%;
+    --ring: 40 26% 58%;
+
+    /* entsättigtes Altgold */
+    --gold: 40 24% 58%;
+    --gold-soft: 38 16% 34%;
+    --gold-foreground: 26 14% 8%;
+
+    --foto: 34 10% 82%;
+    --foto-foreground: 26 14% 18%;
+
+    --chart-1: 40 24% 58%;
+    --chart-2: 30 12% 52%;
+    --chart-3: 34 8% 72%;
+    --chart-4: 24 14% 42%;
+    --chart-5: 38 18% 66%;
+
+    --sidebar-background: 26 9% 11%;
+    --sidebar-foreground: 36 16% 88%;
+    --sidebar-primary: 38 28% 62%;
+    --sidebar-primary-foreground: 26 12% 10%;
+    --sidebar-accent: 26 8% 16%;
+    --sidebar-accent-foreground: 36 16% 90%;
+    --sidebar-border: 28 8% 20%;
+    --sidebar-ring: 40 26% 58%;
   }
 }
-
-
 
 @layer base {
   * {
@@ -87,6 +109,39 @@
   }
 
   body {
-    @apply bg-background text-foreground font-body;
+    @apply bg-background text-foreground font-body antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  h1, h2, h3 {
+    @apply font-heading font-normal tracking-tight;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .gold-hairline {
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      hsl(var(--gold) / 0.5),
+      transparent
+    );
+  }
+  .sand-surface {
+    background-image: radial-gradient(
+      120% 90% at 50% 0%,
+      hsl(var(--accent)) 0%,
+      hsl(var(--background)) 62%
+    );
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

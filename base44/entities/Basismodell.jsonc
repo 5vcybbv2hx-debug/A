@@ -1,0 +1,37 @@
+{
+  "name": "Basismodell",
+  "type": "object",
+  "properties": {
+    "foto": {
+      "type": "string",
+      "title": "Foto"
+    },
+    "ist_anker": {
+      "type": "boolean",
+      "title": "Anker",
+      "default": false
+    },
+    "pose_beschreibung": {
+      "type": "string",
+      "title": "Pose"
+    },
+    "herkunft": {
+      "type": "string",
+      "title": "Herkunft",
+      "enum": [
+        "original_foto",
+        "ki_generiert"
+      ],
+      "default": "original_foto"
+    },
+    "aktiv": {
+      "type": "boolean",
+      "title": "Aktiv",
+      "default": true
+    },
+    "notiz": {
+      "type": "string",
+      "title": "Notiz"
+    }
+  }
+}

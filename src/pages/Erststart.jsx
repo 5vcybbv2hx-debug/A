@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Camera, Check, Images, Loader2, Sparkles } from 
 import { base44 } from '@/api/base44Client';
 import BasismodellSection from '@/components/BasismodellSection';
 import { teilAufnehmen } from '@/lib/teilAufnehmen';
+import { BEISPIELTEILE, beispieleAnlegen } from '@/lib/beispiele';
 import { cn } from '@/lib/utils';
 import { useFarbschema } from '@/lib/theme';
 
@@ -27,6 +28,8 @@ export default function Erststart() {
   const [schritt, setSchritt] = useState(0);
   const [aufnahmen, setAufnahmen] = useState([]);
   const [fehler, setFehler] = useState('');
+  const [beispielLaeuft, setBeispielLaeuft] = useState(false);
+  const [beispielStatus, setBeispielStatus] = useState('');
   const teileRef = useRef(null);
   const erstResume = useRef(true);
   useFarbschema();
@@ -127,6 +130,22 @@ export default function Erststart() {
     if (fertig === 0) {
       setFehler('Kein Teil konnte aufgenommen werden. Versuch es noch einmal, oder mache das Foto heller.');
     }
+  };
+
+  const beispieleUebernehmen = async () => {
+    setBeispielLaeuft(true);
+    setFehler('');
+    try {
+      await beispieleAnlegen((nummer, gesamt, name) => {
+        setBeispielStatus(`${nummer} von ${gesamt}: ${name}`);
+      });
+      setBeispielStatus('');
+      await laden();
+      await weiter(3);
+    } catch (_e) {
+      setFehler('Die Beispielteile konnten nicht angelegt werden. Versuch es noch einmal.');
+    }
+    setBeispielLaeuft(false);
   };
 
   const anker = modelle.find((m) => m.ist_anker && m.foto);
@@ -258,6 +277,34 @@ export default function Erststart() {
               Fotos auswählen
               <span className="text-[11px] text-muted-foreground">mehrere auf einmal möglich</span>
             </button>
+
+            <div className="mt-3 flex items-center gap-3">
+              <span className="h-px flex-1 bg-border" />
+              <span className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">oder</span>
+              <span className="h-px flex-1 bg-border" />
+            </div>
+
+            <button
+              type="button"
+              onClick={beispieleUebernehmen}
+              disabled={beispielLaeuft}
+              className="mt-3 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card/70 px-4 text-[13px] disabled:opacity-50"
+            >
+              {beispielLaeuft ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin text-gold" />
+                  {beispielStatus || 'Wird angelegt'}
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4 text-gold" strokeWidth={1.6} />
+                  Mit {BEISPIELTEILE.length} Beispielteilen starten
+                </>
+              )}
+            </button>
+            <p className="mt-2 text-center text-[11px] leading-relaxed text-muted-foreground">
+              Gezeichnete Teile zum Ausprobieren, später mit einem Griff wieder zu entfernen.
+            </p>
 
             {aufnahmen.length > 0 && (
               <ul className="mt-4 space-y-2">

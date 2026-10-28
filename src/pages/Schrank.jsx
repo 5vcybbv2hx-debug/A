@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Search, Star, Clock } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
+import { BEISPIELTEILE, beispieleAnlegen, beispieleEntfernen } from '@/lib/beispiele';
 import FilterChips from '@/components/FilterChips';
 import ItemTile from '@/components/ItemTile';
 import ItemSheet from '@/components/ItemSheet';
@@ -25,10 +26,36 @@ export default function Schrank() {
   const [debounced, setDebounced] = useState('');
   const [active, setActive] = useState(null);
   const [reload, setReload] = useState(0);
+  const [beispielLaeuft, setBeispielLaeuft] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setDebounced(suche.trim()), 350);
-    return () => clearTimeout(t);
+    const beispieleHolen = async () => {
+    setBeispielLaeuft(true);
+    try {
+      await beispieleAnlegen();
+      setReload((r) => r + 1);
+    } catch (_e) {
+      // Sie kann es jederzeit im Erststart erneut versuchen.
+    }
+    setBeispielLaeuft(false);
+  };
+
+  const beispieleWeg = async () => {
+    setBeispielLaeuft(true);
+    try {
+      await beispieleEntfernen();
+      setReload((r) => r + 1);
+    } catch (_e) {
+      // still: beim nächsten Versuch klappt es
+    }
+    setBeispielLaeuft(false);
+  };
+
+  // eslint-disable-next-line unused-imports/no-unused-vars -- wird in JSX gelesen, die Regel sieht das hier nicht
+  const anzahlBeispiele = items.filter((i) => i.ist_beispiel).length;
+
+  return () => clearTimeout(t);
   }, [suche]);
 
   const query = useMemo(() => {
@@ -135,6 +162,22 @@ export default function Schrank() {
         <FilterChips options={ANLAESSE} value={anlass} onChange={setAnlass} allLabel="Alle Anlässe" />
       </div>
 
+      {anzahlBeispiele > 0 && (
+        <div className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-border/70 bg-card/60 px-3 py-2">
+          <span className="text-[11px] text-muted-foreground">
+            {anzahlBeispiele === 1 ? 'Ein Beispielteil' : `${anzahlBeispiele} Beispielteile`} im Schrank
+          </span>
+          <button
+            type="button"
+            onClick={() => beispieleWeg()}
+            disabled={beispielLaeuft}
+            className="min-h-[44px] shrink-0 px-1 text-[11px] text-gold underline decoration-gold/40 underline-offset-4 disabled:opacity-50"
+          >
+            Entfernen
+          </button>
+        </div>
+      )}
+
       {!loading && items.length === 0 ? (
         <div className="mt-16 flex flex-col items-center text-center">
           <div className="mb-5 h-16 w-12 rounded-t-full border border-dashed border-gold/50" />
@@ -148,6 +191,14 @@ export default function Schrank() {
           >
             Teile hinzufügen
           </Link>
+          <button
+            type="button"
+            onClick={() => beispieleHolen()}
+            disabled={beispielLaeuft}
+            className="mt-3 flex min-h-[44px] items-center text-[12px] text-gold underline decoration-gold/40 underline-offset-4 disabled:opacity-50"
+          >
+            {beispielLaeuft ? 'Wird angelegt …' : `Mit ${BEISPIELTEILE.length} Beispielteilen ausprobieren`}
+          </button>
         </div>
       ) : (
         <>

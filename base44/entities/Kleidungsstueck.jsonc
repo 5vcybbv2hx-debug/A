@@ -51,6 +51,10 @@
         "accessory"
       ]
     },
+    "ist_beispiel": {
+      "type": "boolean",
+      "title": "Beispielteil"
+    },
     "accessoire_platz": {
       "type": "string",
       "title": "Platz am Körper",

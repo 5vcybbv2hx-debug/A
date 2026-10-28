@@ -50,9 +50,15 @@ export default function Galerie() {
   });
 
   const favorit = async (outfit) => {
-    await base44.entities.Outfit.update(outfit.id, { favorit: !outfit.favorit });
-    setAktiv((a) => (a ? { ...a, favorit: !a.favorit } : a));
-    setReload((r) => r + 1);
+    const neu = !outfit.favorit;
+    setOutfits((list) => list.map((o) => (o.id === outfit.id ? { ...o, favorit: neu } : o)));
+    setAktiv((a) => (a && a.id === outfit.id ? { ...a, favorit: neu } : a));
+    try {
+      await base44.entities.Outfit.update(outfit.id, { favorit: neu });
+    } catch (_e) {
+      setOutfits((list) => list.map((o) => (o.id === outfit.id ? { ...o, favorit: !neu } : o)));
+      setAktiv((a) => (a && a.id === outfit.id ? { ...a, favorit: !neu } : a));
+    }
   };
 
   const loeschen = async (outfit) => {
@@ -167,7 +173,7 @@ export default function Galerie() {
       )}
 
       <Sheet open={Boolean(aktiv)} onOpenChange={(open) => !open && setAktiv(null)}>
-        <SheetContent side="bottom" className="h-[88vh] overflow-y-auto rounded-t-3xl border-border bg-card p-0">
+        <SheetContent side="bottom" className="h-[88vh] overflow-y-auto overscroll-contain rounded-t-3xl border-border bg-card p-0">
           {aktiv && (
             <>
               <SheetHeader className="border-b border-border/70 px-5 py-4">

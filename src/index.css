@@ -108,9 +108,40 @@
     @apply border-border outline-ring/50;
   }
 
+  html,
+  body,
+  #root {
+    /* verhindert den Gummiband-Effekt im iOS-WebView */
+    overscroll-behavior-y: none;
+  }
+
   body {
     @apply bg-background text-foreground font-body antialiased;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Systemgesten: keine Textauswahl oder Callouts auf Bedienelementen */
+  button,
+  a,
+  label,
+  summary,
+  select,
+  svg,
+  [role='button'],
+  [role='tab'],
+  [role='option'],
+  [role='menuitem'] {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Eingabefelder bleiben normal editierbar */
+  input,
+  textarea,
+  [contenteditable='true'] {
+    -webkit-user-select: text;
+    user-select: text;
   }
 
   h1, h2, h3 {

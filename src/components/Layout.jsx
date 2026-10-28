@@ -64,7 +64,7 @@ export default function Layout() {
           </p>
         </aside>
 
-        <main className="min-w-0 flex-1 pb-28 md:pb-12">
+        <main className="min-w-0 flex-1 pb-28 pt-[env(safe-area-inset-top)] md:pb-12">
           <Outlet />
         </main>
       </div>

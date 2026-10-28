@@ -53,9 +53,14 @@ export default function ItemSheet({ item, open, onOpenChange, onChanged }) {
   };
 
   const favoritUmschalten = async () => {
-    patch({ favorit: !form.favorit });
-    await base44.entities.Kleidungsstueck.update(item.id, { favorit: !item.favorit });
-    onChanged?.();
+    const neu = !form.favorit;
+    patch({ favorit: neu });
+    try {
+      await base44.entities.Kleidungsstueck.update(item.id, { favorit: neu });
+      onChanged?.();
+    } catch (_e) {
+      patch({ favorit: !neu });
+    }
   };
 
   const loeschenBestaetigen = async () => {
@@ -68,7 +73,7 @@ export default function ItemSheet({ item, open, onOpenChange, onChanged }) {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="bottom"
-        className="h-[92vh] overflow-y-auto rounded-t-3xl border-border bg-card p-0"
+        className="h-[92vh] overflow-y-auto overscroll-contain rounded-t-3xl border-border bg-card p-0"
       >
         <SheetHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-border/70 bg-card/95 px-5 py-3 backdrop-blur">
           <SheetTitle className="font-heading text-lg font-normal">Teil bearbeiten</SheetTitle>

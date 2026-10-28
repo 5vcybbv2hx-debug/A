@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Lock, Check, Sun, Moon } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import BasismodellSection from '@/components/BasismodellSection';
+import AccountActions from '@/components/AccountActions';
 
 const inputClass =
   'min-h-[44px] w-full rounded-xl border border-input bg-card px-3 text-[14px] outline-none focus:border-gold/60';
@@ -182,6 +183,13 @@ export default function Profil() {
           Alle Bilder liegen im privaten Speicher und werden nur über kurzlebige, signierte Links angezeigt.
           Sie werden nie öffentlich geteilt.
         </p>
+      </section>
+
+      <section className="mt-9">
+        <h2 className="font-heading text-xl">Konto</h2>
+        <div className="mt-3">
+          <AccountActions />
+        </div>
       </section>
     </div>
   );

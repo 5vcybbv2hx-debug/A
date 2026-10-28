@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Loader2, Luggage, Sparkles } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import PacklisteDetail from '@/components/PacklisteDetail';
+import BackHeader from '@/components/BackHeader';
 import { formatDate, todayISO, tomorrowISO } from '@/lib/constants';
 
 export default function Packlisten() {
@@ -66,6 +67,7 @@ export default function Packlisten() {
 
   return (
     <div className="px-4 pb-8 pt-7 md:px-8 md:pt-10">
+      <BackHeader label="Zurück" />
       <header>
         <p className="text-[10px] uppercase tracking-[0.28em] text-muted-foreground">Reise-Assistent</p>
         <h1 className="mt-1 font-heading text-[2rem] leading-none md:text-4xl">Packlisten</h1>

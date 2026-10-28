@@ -4,6 +4,7 @@ import { Camera, Loader2, Check, X, Sparkles } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { shrinkImage } from '@/lib/constants';
 import UploadReview from '@/components/UploadReview';
+import BackHeader from '@/components/BackHeader';
 import { cn } from '@/lib/utils';
 
 const STATUS_TEXT = {
@@ -104,6 +105,7 @@ export default function Upload() {
 
   return (
     <div className="px-4 pb-8 pt-7 md:px-8 md:pt-10">
+      <BackHeader label="Zurück" />
       <header>
         <p className="text-[10px] uppercase tracking-[0.28em] text-muted-foreground">Neu aufnehmen</p>
         <h1 className="mt-1 font-heading text-[2rem] leading-none md:text-4xl">

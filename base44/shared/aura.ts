@@ -4,6 +4,13 @@ export const KATEGORIEN = [
 ];
 
 export const SLOTS = ['top', 'bottom', 'fullbody', 'outer', 'shoes', 'accessory'];
+export const ACCESSOIRE_PLAETZE = ['kopf', 'hals', 'hand', 'sonstige'];
+export const ACCESSOIRE_PLATZ_LABEL: Record<string, string> = {
+  kopf: 'am Kopf getragen',
+  hals: 'am Hals getragen',
+  hand: 'in der Hand oder über der Schulter getragen',
+  sonstige: 'getragen',
+};
 export const MUSTER = ['Unifarben', 'Gestreift', 'Gemustert', 'Blumen', 'Karriert', 'Sonstiges'];
 export const SAISONS = ['Frühling', 'Sommer', 'Herbst', 'Winter', 'Übergang', 'Ganzjahres'];
 export const ANLAESSE = ['Alltag', 'Business', 'Sport', 'Feier', 'Zuhause', 'Date'];
@@ -33,6 +40,9 @@ export async function toPrivateImage(base44, url, filename = 'bild.png') {
 
 export function describeItem(item) {
   const teile = [item.kategorie];
+  if (item.slot_typ === 'accessory' && item.accessoire_platz) {
+    teile.push(ACCESSOIRE_PLATZ_LABEL[item.accessoire_platz] || 'getragen');
+  }
   if (item.farben?.length) teile.push(item.farben.join(' und '));
   if (item.muster && item.muster !== 'Unifarben') teile.push(item.muster);
   const detail = teile.filter(Boolean).join(', ');

@@ -59,10 +59,12 @@ export default function BasismodellSection({ modelle, onChanged }) {
 
       try {
         setStatus('Wird freigestellt, das dauert beim ersten Mal etwa eine Minute …');
-        const png = await freistellen(klein, (_key, aktuell, gesamt) => {
-          if (gesamt > 0) {
-            setStatus(`Wird freigestellt … ${Math.round((aktuell / gesamt) * 100)} %`);
-          }
+        const png = await freistellen(klein, (phase, prozent) => {
+          setStatus(
+            phase === 'laden'
+              ? `Das Modell wird einmalig geladen … ${prozent} %`
+              : `Wird freigestellt … ${prozent} %`
+          );
         });
         fotoFreigestellt = await hochladen(alsPngDatei(png, 'basisfoto-freigestellt.png'));
         const messung = await kalibriereZonen(png);

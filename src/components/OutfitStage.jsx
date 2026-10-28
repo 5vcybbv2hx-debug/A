@@ -3,15 +3,21 @@ import { Loader2, Sparkles, UserRound, RotateCcw } from 'lucide-react';
 import FileImage from '@/components/FileImage';
 import { resolveFile } from '@/lib/files';
 import { STANDARD_ZONEN } from '@/lib/kalibrierung';
+import { zoneForItem } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
+// Reihenfolge der Zonen von hinten nach vorn. Accessoires liegen über der
+// Kleidung, das Haarband über allem.
 const ORDER = [
-  ['fullbody', 'z-[20]'],
-  ['top', 'z-[25]'],
-  ['bottom', 'z-[25]'],
-  ['shoes', 'z-[28]'],
-  ['outer', 'z-[32]'],
-  ['accessory', 'z-[38]'],
+  ['fullbody', 20],
+  ['bottom', 24],
+  ['top', 26],
+  ['shoes', 28],
+  ['outer', 32],
+  ['accessory', 34],
+  ['accessory_hand', 36],
+  ['accessory_hals', 38],
+  ['accessory_kopf', 40],
 ];
 
 const RUHE = { dx: 0, dy: 0, s: 1 };
@@ -205,7 +211,7 @@ export default function OutfitStage({
   );
 
   const ebene = (slot, zIndex) => {
-    const item = items.find((i) => i.slot_typ === slot);
+    const item = items.find((i) => zoneForItem(i) === slot);
     if (!item) return null;
     return (
       <Ebene

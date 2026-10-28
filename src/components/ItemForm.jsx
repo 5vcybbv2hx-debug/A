@@ -1,4 +1,12 @@
-import { KATEGORIEN, SLOTS, SLOT_LABEL, MUSTER, SAISONS, ANLAESSE } from '@/lib/constants';
+import {
+  KATEGORIEN,
+  SLOTS,
+  SLOT_LABEL,
+  ACCESSOIRE_PLAETZE,
+  MUSTER,
+  SAISONS,
+  ANLAESSE,
+} from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 const inputClass =
@@ -53,6 +61,20 @@ export default function ItemForm({ value, onChange }) {
           </select>
         </Field>
       </div>
+
+      {value.slot_typ === 'accessory' && (
+        <Field label="Platz am Körper">
+          <select
+            className={inputClass}
+            value={value.accessoire_platz || 'sonstige'}
+            onChange={(e) => set('accessoire_platz', e.target.value)}
+          >
+            {ACCESSOIRE_PLAETZE.map((p) => (
+              <option key={p.value} value={p.value}>{p.label}</option>
+            ))}
+          </select>
+        </Field>
+      )}
 
       <Field label="Farben (mit Komma trennen)">
         <input

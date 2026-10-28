@@ -63,7 +63,7 @@ export default async function (req) {
         return [
           `id=${i.id}`,
           i.name,
-          `${i.kategorie}/${i.slot_typ}`,
+          `${i.kategorie}/${i.slot_typ}${i.accessoire_platz ? `/${i.accessoire_platz}` : ''}`,
           `Farben: ${(i.farben || []).join(', ') || 'unbekannt'}`,
           `Muster: ${i.muster || 'Unifarben'}`,
           `Saison: ${i.saison || 'Ganzjahres'}`,
@@ -106,6 +106,7 @@ export default async function (req) {
       '\n\nRegeln:\n' +
       '- Genau 3 Vorschläge.\n' +
       '- Jedes Outfit ist vollständig: entweder top + bottom oder ein fullbody-Teil, plus passende shoes. outer und accessory nur wenn sinnvoll.\n' +
+      '- Accessoires sind mit ihrer Position angegeben (kopf, hals, hand). Höchstens ein Accessoire pro Position, aber durchaus mehrere verschiedene gleichzeitig, etwa Kette plus Tasche.\n' +
       '- Kein Muster auf Muster. Farben müssen zueinander passen, No-Go-Farben meiden.\n' +
       '- Bevorzuge Favoriten und Teile, die lange nicht getragen wurden (über 60 Tage).\n' +
       '- ki_kommentar: 1–2 Sätze, warm, persönlich, Deutsch, wie eine Freundin es sagen würde. Kein Werbeton.\n' +

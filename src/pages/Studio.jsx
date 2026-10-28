@@ -5,7 +5,7 @@ import { base44 } from '@/api/base44Client';
 import OutfitStage from '@/components/OutfitStage';
 import StudioShelf from '@/components/StudioShelf';
 import SuggestionList from '@/components/SuggestionList';
-import { ANLAESSE, SAISONS } from '@/lib/constants';
+import { ANLAESSE, SAISONS, zoneForItem } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 const VIEWS = [
@@ -81,13 +81,16 @@ export default function Studio() {
   const signatur = signaturOf(selectedIds);
   const cacheGueltig = render.bild && render.signatur === signatur && render.basisId === basisId;
 
+  // Ersetzt wird nur, was dieselbe Zone belegt. Dadurch gehen Kette und Tasche
+  // gleichzeitig, zwei Ketten schließen sich weiterhin aus.
   const toggle = (item) => {
     setSelectedIds((prev) => {
       if (prev.includes(item.id)) return prev.filter((id) => id !== item.id);
-      const gleicherSlot = prev.filter(
-        (id) => items.find((i) => i.id === id)?.slot_typ === item.slot_typ
+      const zone = zoneForItem(item);
+      const gleicheZone = prev.filter(
+        (id) => zoneForItem(items.find((i) => i.id === id)) === zone
       );
-      return [...prev.filter((id) => !gleicherSlot.includes(id)), item.id];
+      return [...prev.filter((id) => !gleicheZone.includes(id)), item.id];
     });
   };
 

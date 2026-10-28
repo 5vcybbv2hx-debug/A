@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
-import { signedUrl, KATEGORIEN, SLOTS, MUSTER, SAISONS, ANLAESSE, angemeldeterUser } from '../../shared/aura.ts';
+import { signedUrl, KATEGORIEN, SLOTS, ACCESSOIRE_PLAETZE, MUSTER, SAISONS, ANLAESSE, angemeldeterUser } from '../../shared/aura.ts';
 
 export default async function (req) {
   try {
@@ -28,6 +28,7 @@ export default async function (req) {
               name: { type: 'string' },
               kategorie: { type: 'string', enum: KATEGORIEN },
               slot_typ: { type: 'string', enum: SLOTS },
+              accessoire_platz: { type: 'string', enum: ACCESSOIRE_PLAETZE },
               farben: { type: 'array', items: { type: 'string' } },
               muster: { type: 'string', enum: MUSTER },
             },
@@ -47,6 +48,7 @@ export default async function (req) {
         '- saison: Frühling, Sommer, Herbst, Winter, Übergang oder Ganzjahres\n' +
         '- kommentar: ein Satz, was den Look ausmacht, warm formuliert\n' +
         '- teile: 1–6 sichtbare Stücke mit name (kurz), kategorie, slot_typ, farben, muster\n' +
+        '- accessoire_platz nur bei Accessoires: kopf (Haarband, Mütze, Sonnenbrille), hals (Kette, Ohrringe, Schal), hand (Tasche, Gürtel in der Hand), sonstige\n' +
         'Nur sicher erkennbare Stücke nennen, nichts erfinden.',
       file_urls: [url],
       response_json_schema: schema,
@@ -61,6 +63,7 @@ export default async function (req) {
       name: t.name || t.kategorie,
       kategorie: t.kategorie,
       slot_typ: t.slot_typ,
+      accessoire_platz: t.accessoire_platz || null,
       farben: t.farben || [],
       muster: t.muster || 'Unifarben',
       saison: erkennung.saison || 'Ganzjahres',

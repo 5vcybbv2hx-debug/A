@@ -21,6 +21,9 @@ const FALLBACK = {
   shoes: { x: 28, y: 85, w: 44, h: 12 },
   outer: { x: 6, y: 9, w: 88, h: 46 },
   accessory: { x: 69, y: 32, w: 26, h: 18 },
+  accessory_kopf: { x: 36, y: 0, w: 28, h: 13 },
+  accessory_hals: { x: 37, y: 15, w: 26, h: 11 },
+  accessory_hand: { x: 68, y: 40, w: 25, h: 20 },
 };
 
 function ladeBild(quelle) {
@@ -194,6 +197,42 @@ export async function kalibriereZonen(quelle) {
       };
     })();
 
+    // Accessoires sitzen an drei unterschiedlichen Stellen: am Kopf, am Hals
+    // und seitlich an der Hand. Jede bekommt ihre eigene Zone.
+    const kopfZone = band(-0.02, Math.min(0.22, hals + 0.02), 0.22);
+    // Kette und Ohrringe hängen am Hals, nicht über die Schultern: die Zone wird
+    // um den Hals selbst gebaut und nur so breit wie eine Kette fällt.
+    const halsZone = (() => {
+      // Genau die Halszeile messen, nicht einen Bereich: sonst landen die
+      // Schultern mit in der Zone und die Kette wird bildbreit.
+      const z = zeilen[oben + zeile(hals)];
+      if (!z) return null;
+      const halsBreite = z.breite;
+      const mitte = (z.min + z.max) / 2;
+      const halbe = halsBreite * 1.5;
+      const x0 = mitte - halbe;
+      const x1 = mitte + halbe;
+      return {
+        x: runde(klemme((x0 / breite) * 100, 0, 98)),
+        y: runde(klemme(((oben + zeile(hals - 0.02)) / hoehe) * 100, 0, 98)),
+        w: runde(klemme(((x1 - x0) / breite) * 100, 3, 100)),
+        h: runde(klemme(((zeile(Math.min(0.34, hals + 0.10)) - zeile(hals - 0.02)) / hoehe) * 100, 3, 100)),
+      };
+    })();
+    const handZone = (() => {
+      const s2 = spanne(Math.min(taille, huefte) - 0.04, Math.min(0.68, huefte + 0.08));
+      if (!s2) return null;
+      const koerperBreite = s2.max - s2.min;
+      const x0 = s2.max - koerperBreite * 0.15;
+      const x1 = s2.max + koerperBreite * 0.3;
+      return {
+        x: runde(klemme((x0 / breite) * 100, 0, 98)),
+        y: runde(klemme(((oben + zeile(Math.min(taille, huefte) - 0.04)) / hoehe) * 100, 0, 98)),
+        w: runde(klemme(((x1 - x0) / breite) * 100, 3, 100)),
+        h: runde(klemme(((zeile(Math.min(0.68, huefte + 0.08)) - zeile(Math.min(taille, huefte) - 0.04)) / hoehe) * 100, 3, 100)),
+      };
+    })();
+
     const zonen = {
       fullbody: passe(band(-0.02, 1.02, 0.04), 'fullbody'),
       top: passe(band(schulter - 0.05, taille + 0.03, 0.14), 'top'),
@@ -201,6 +240,9 @@ export async function kalibriereZonen(quelle) {
       shoes: passe(band(0.92, 1.0, 0.3), 'shoes'),
       outer: passe(band(schulter - 0.08, huefte + 0.05, 0.2), 'outer'),
       accessory: passe(accessoire, 'accessory'),
+      accessory_kopf: passe(kopfZone, 'accessory_kopf'),
+      accessory_hals: passe(halsZone, 'accessory_hals'),
+      accessory_hand: passe(handZone, 'accessory_hand'),
     };
 
     return { zonen, gemessen: true, seitenverhaeltnis };

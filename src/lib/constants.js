@@ -14,9 +14,45 @@ export const SLOT_LABEL = {
   accessory: 'Accessoire',
 };
 
+// Accessoires liegen nicht alle an derselben Stelle. Die Position entscheidet,
+// welche Zone auf der Bühne sie belegen, und erlaubt mehrere gleichzeitig:
+// eine Kette am Hals, eine Tasche an der Hand, ein Haarband am Kopf.
+export const ACCESSOIRE_PLAETZE = [
+  { value: 'kopf', label: 'Kopf und Haar' },
+  { value: 'hals', label: 'Hals und Dekolleté' },
+  { value: 'hand', label: 'Hand und Schulter' },
+  { value: 'sonstige', label: 'Sonstiges' },
+];
+
+export const ACCESSOIRE_PLATZ_LABEL = Object.fromEntries(
+  ACCESSOIRE_PLAETZE.map((p) => [p.value, p.label])
+);
+
 export const MUSTER = ['Unifarben', 'Gestreift', 'Gemustert', 'Blumen', 'Karriert', 'Sonstiges'];
 export const SAISONS = ['Frühling', 'Sommer', 'Herbst', 'Winter', 'Übergang', 'Ganzjahres'];
 export const ANLAESSE = ['Alltag', 'Business', 'Sport', 'Feier', 'Zuhause', 'Date'];
+
+export function platzForKategorie(kategorie) {
+  switch (kategorie) {
+    case 'Tasche':
+      return 'hand';
+    case 'Schmuck':
+      return 'hals';
+    default:
+      return 'sonstige';
+  }
+}
+
+/**
+ * Zone, die ein Teil auf der Bühne belegt. Für alles außer Accessoires ist das
+ * der Slot selbst, für Accessoires die Position am Körper.
+ */
+export function zoneForItem(item) {
+  if (!item) return null;
+  if (item.slot_typ !== 'accessory') return item.slot_typ;
+  const platz = item.accessoire_platz || 'sonstige';
+  return platz === 'sonstige' ? 'accessory' : `accessory_${platz}`;
+}
 
 export function slotForKategorie(kategorie) {
   switch (kategorie) {

@@ -2,6 +2,9 @@ import { useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Moon, Shirt, Sparkles, LayoutGrid, User, Luggage } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { vorwaermen } from '@/lib/cutout';
+
+const VORWAERM_SCHLUESSEL = 'a-freistellen-modell';
 
 const NAV = [
   { to: '/heute', label: 'Heute', icon: Moon },
@@ -15,6 +18,44 @@ const SIDE_NAV = [...NAV, { to: '/packlisten', label: 'Packlisten', icon: Luggag
 
 export default function Layout() {
   const { pathname } = useLocation();
+
+  // Das Freistell-Modell einmal im Leerlauf holen, damit das erste Hochladen
+  // nicht eine Minute vor leerem Bildschirm steht. Nicht bei Datensparmodus
+  // und nicht im Mobilfunknetz mit schwacher Verbindung.
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+    if (localStorage.getItem(VORWAERM_SCHLUESSEL)) return undefined;
+
+    const verbindung = navigator.connection;
+    if (verbindung?.saveData) return undefined;
+    if (verbindung?.effectiveType && verbindung.effectiveType !== '4g') return undefined;
+
+    let abgebrochen = false;
+    const starten = () => {
+      if (abgebrochen) return;
+      vorwaermen()
+        .then((ok) => {
+          if (ok) localStorage.setItem(VORWAERM_SCHLUESSEL, String(Date.now()));
+        })
+        .catch(() => {});
+    };
+
+    let kennung;
+    if (typeof window.requestIdleCallback === 'function') {
+      kennung = window.requestIdleCallback(starten, { timeout: 12000 });
+    } else {
+      kennung = window.setTimeout(starten, 8000);
+    }
+
+    return () => {
+      abgebrochen = true;
+      if (typeof window.cancelIdleCallback === 'function' && typeof kennung === 'number') {
+        window.cancelIdleCallback(kennung);
+      } else {
+        window.clearTimeout(kennung);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const gespeichert = localStorage.getItem('aura-theme');

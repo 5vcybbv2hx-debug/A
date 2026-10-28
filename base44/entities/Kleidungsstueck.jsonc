@@ -51,6 +51,16 @@
         "accessory"
       ]
     },
+    "accessoire_platz": {
+      "type": "string",
+      "title": "Platz am Körper",
+      "enum": [
+        "kopf",
+        "hals",
+        "hand",
+        "sonstige"
+      ]
+    },
     "farben": {
       "type": "array",
       "title": "Farben",

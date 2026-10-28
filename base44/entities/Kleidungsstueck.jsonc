@@ -103,6 +103,18 @@
         "type": "string"
       }
     },
+    "shop_name": {
+      "type": "string",
+      "title": "Shop"
+    },
+    "quelle_url": {
+      "type": "string",
+      "title": "Link zum Produkt"
+    },
+    "preis": {
+      "type": "number",
+      "title": "Preis in Euro"
+    },
     "marke": {
       "type": "string",
       "title": "Marke"

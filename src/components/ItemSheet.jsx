@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Star, Check, Trash2, Layers, X } from 'lucide-react';
+import { Check, ExternalLink, Layers, Star, Trash2, X } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { todayISO } from '@/lib/constants';
 import FileImage from '@/components/FileImage';
@@ -108,9 +108,24 @@ export default function ItemSheet({ item, open, onOpenChange, onChanged }) {
             </button>
           </div>
 
-          <div className="mb-5 flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+          <div className="mb-5 flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground">
             {item.letzte_nutzung && <span>Zuletzt: {item.letzte_nutzung}</span>}
             <span>· {item.nutzungszaehler || 0}× getragen</span>
+            {item.shop_name && <span>· {item.shop_name}</span>}
+            {typeof item.preis === 'number' && (
+              <span>· {item.preis.toFixed(2).replace('.', ',')} €</span>
+            )}
+            {item.quelle_url && (
+              <a
+                href={item.quelle_url}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex min-h-[44px] items-center gap-1 text-gold underline decoration-gold/40 underline-offset-4"
+              >
+                <ExternalLink className="h-3 w-3" strokeWidth={1.6} />
+                zum Produkt
+              </a>
+            )}
           </div>
 
           <ItemForm value={form} onChange={patch} />

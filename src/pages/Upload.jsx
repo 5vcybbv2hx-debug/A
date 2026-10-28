@@ -6,6 +6,8 @@ import { shrinkImage } from '@/lib/constants';
 import UploadReview from '@/components/UploadReview';
 import BackHeader from '@/components/BackHeader';
 import { teilAufnehmen } from '@/lib/teilAufnehmen';
+import { teilAusShop } from '@/lib/shop';
+import { Link2, ClipboardPaste } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const STATUS_TEXT = {
@@ -28,6 +30,10 @@ export default function Upload() {
   const [lookBusy, setLookBusy] = useState(false);
   const [lookErgebnis, setLookErgebnis] = useState(null);
   const [lookFehler, setLookFehler] = useState('');
+  const [shopLink, setShopLink] = useState('');
+  const [shopBusy, setShopBusy] = useState(false);
+  const [shopStatus, setShopStatus] = useState('');
+  const [shopFehler, setShopFehler] = useState('');
   const abort = useRef(false);
   const inputRef = useRef(null);
   const lookRef = useRef(null);
@@ -72,6 +78,42 @@ export default function Upload() {
 
     setReview(ergebnisse);
     setPhase(ergebnisse.length ? 'pruefen' : 'auswahl');
+  };
+
+  const SHOP_TEXT = {
+    shop: 'Shop wird gelesen',
+    laedt: 'Bild wird geladen',
+    freistellen: 'Wird freigestellt',
+    verarbeitung: 'Wird erkannt',
+  };
+
+  const ausShop = async (link) => {
+    const adresse = String(link || shopLink).trim();
+    if (!adresse) return;
+    setShopBusy(true);
+    setShopFehler('');
+    setShopStatus(SHOP_TEXT.shop);
+    try {
+      const item = await teilAusShop(adresse, (phase) => setShopStatus(SHOP_TEXT[phase] || 'Läuft'));
+      setReview((alt) => [...alt, item]);
+      setQueue([]);
+      setPhase('pruefen');
+      setShopLink('');
+    } catch (e) {
+      setShopFehler(e?.message || e?.response?.data?.error || 'Der Link konnte nicht gelesen werden.');
+    }
+    setShopBusy(false);
+    setShopStatus('');
+  };
+
+  const linkEinfuegen = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      const treffer = String(text || '').match(/https?:\/\/\S+/);
+      if (treffer) setShopLink(treffer[0]);
+    } catch (_e) {
+      setShopFehler('Der Zwischenspeicher ist gesperrt. Füge den Link von Hand ein.');
+    }
   };
 
   const lookStarten = async (file) => {
@@ -151,6 +193,53 @@ export default function Upload() {
                   Mehrere auf einmal sind kein Problem. Am besten jedes Teil einzeln auf hellem Untergrund.
                 </span>
               </button>
+              <div className="mt-4 rounded-2xl border border-border/70 bg-card/70 p-4">
+                <p className="flex items-center gap-2 text-[13px]">
+                  <Link2 className="h-4 w-4 text-gold" strokeWidth={1.6} />
+                  Aus einem Onlineshop
+                </p>
+                <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
+                  Link zum Produkt einfügen. Ich hole das Bild und du siehst das Teil an dir, bevor du es
+                  kaufst.
+                </p>
+                <div className="mt-3 flex gap-2">
+                  <input
+                    type="url"
+                    inputMode="url"
+                    value={shopLink}
+                    onChange={(e) => setShopLink(e.target.value)}
+                    placeholder="https://..."
+                    className="min-h-[44px] min-w-0 flex-1 rounded-xl border border-border bg-background px-3 text-[12px]"
+                  />
+                  <button
+                    type="button"
+                    onClick={linkEinfuegen}
+                    aria-label="Link aus dem Zwischenspeicher einfügen"
+                    className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-border text-muted-foreground"
+                  >
+                    <ClipboardPaste className="h-4 w-4" strokeWidth={1.6} />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => ausShop()}
+                  disabled={shopBusy || !shopLink.trim()}
+                  className="mt-2 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-gold/50 bg-gold/5 px-4 text-[12px] disabled:opacity-40"
+                >
+                  {shopBusy ? (
+                    <>
+                      <Loader2 className="h-3.5 w-3.5 animate-spin text-gold" />
+                      {shopStatus || 'Wird gelesen'}
+                    </>
+                  ) : (
+                    'Teil aus dem Link übernehmen'
+                  )}
+                </button>
+                {shopFehler && (
+                  <p className="mt-2 text-[11px] leading-relaxed text-destructive">{shopFehler}</p>
+                )}
+              </div>
+
               <p className="mt-4 text-center text-[11px] text-muted-foreground">
                 Deine Fotos liegen im privaten Speicher und sind nur für dich sichtbar.
               </p>

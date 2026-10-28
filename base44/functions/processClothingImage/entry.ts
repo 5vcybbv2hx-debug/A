@@ -1,5 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
-import { signedUrl, toPrivateImage, KATEGORIEN, SLOTS, MUSTER, SAISONS, angemeldeterUser, gehoert, keineBerechtigung } from '../../shared/aura.ts';
+import { signedUrl, KATEGORIEN, SLOTS, MUSTER, SAISONS, angemeldeterUser, gehoert, keineBerechtigung } from '../../shared/aura.ts';
 
 export default async function (req) {
   try {
@@ -20,22 +20,8 @@ export default async function (req) {
 
     const url = await signedUrl(base44, item.foto_original, 1800);
 
-    // 1) Freistellen: Packshot auf reinem Weiß (wird transparent überblendet dargestellt)
-    let freigestellt = item.foto_freigestellt || null;
-    try {
-      const gen = await base44.asServiceRole.integrations.Core.GenerateImage({
-        prompt:
-          'E-Commerce-Produktfoto: genau dieses eine Kleidungsstück allein, vollständig sichtbar, zentriert, ' +
-          'flach liegend, ohne Person, ohne Bügel, ohne Requisiten, auf rein weißem Hintergrund (#ffffff), ' +
-          'weiches gleichmäßiges Studiolicht, keine Schatten, höchste Detailtreue an Farbe, Muster und Material.',
-        existing_image_urls: [url],
-      });
-      freigestellt = await toPrivateImage(base44, gen.url, `${item_id}-freigestellt.png`);
-    } catch (_e) {
-      freigestellt = item.foto_freigestellt || null;
-    }
-
-    // 2) Vision-Tagging – nur als Vorschlag
+    // Das Freistellen passiert schon im Browser (echtes Alpha-PNG, keine Credits).
+    // Hier bleibt nur das Vision-Tagging – und das ist ein Vorschlag, keine Festlegung.
     const tagSchema = {
       type: 'object',
       properties: {
@@ -70,7 +56,6 @@ export default async function (req) {
 
     const cleanName = (item.name || '').trim();
     const update = {
-      foto_freigestellt: freigestellt,
       verarbeitungs_status: 'getaggt',
       kategorie: vorschlag?.kategorie || item.kategorie,
       slot_typ: vorschlag?.slot_typ || item.slot_typ,

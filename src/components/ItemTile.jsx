@@ -18,7 +18,7 @@ export default function ItemTile({ item, onClick, selected = false, className })
           uri={item.foto_freigestellt || item.foto_original}
           fittingType="fit"
           alt={item.name}
-          className="absolute inset-0 h-full w-full object-contain p-2 mix-blend-multiply"
+          className="absolute inset-0 h-full w-full object-contain p-2"
         />
         {item.favorit && (
           <Star className="absolute right-2 top-2 h-4 w-4 fill-gold text-gold" strokeWidth={1.2} />

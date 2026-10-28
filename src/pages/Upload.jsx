@@ -5,12 +5,14 @@ import { base44 } from '@/api/base44Client';
 import { shrinkImage } from '@/lib/constants';
 import UploadReview from '@/components/UploadReview';
 import BackHeader from '@/components/BackHeader';
+import { freistellen, alsPngDatei } from '@/lib/cutout';
 import { cn } from '@/lib/utils';
 
 const STATUS_TEXT = {
   wartet: 'Wartet',
   laedt: 'Wird hochgeladen',
-  verarbeitung: 'Wird freigestellt & erkannt',
+  freistellen: 'Wird freigestellt',
+  verarbeitung: 'Wird erkannt',
   fertig: 'Fertig',
   fehler: 'Nicht geklappt',
 };
@@ -66,7 +68,24 @@ export default function Upload() {
             favorit: false,
             nutzungszaehler: 0,
           });
-          update(entry.key, { status: 'verarbeitung', itemId: created.id });
+          update(entry.key, { status: 'freistellen', itemId: created.id });
+
+          // Echtes Freistellen auf dem Gerät: keine Credits, echter Alphakanal.
+          let ohneFreistellung = false;
+          try {
+            const png = alsPngDatei(await freistellen(klein));
+            const { file_uri: png_uri } = await base44.integrations.Core.UploadPrivateFile({ file: png });
+            await base44.entities.Kleidungsstueck.update(created.id, {
+              foto_freigestellt: png_uri,
+              verarbeitungs_status: 'freigestellt',
+            });
+          } catch (_e) {
+            // Ohne Freistellung bleibt nur das Originalfoto – das Tagging läuft trotzdem.
+            ohneFreistellung = true;
+            update(entry.key, { ohneFreistellung: true });
+          }
+
+          update(entry.key, { status: 'verarbeitung' });
           const res = await base44.functions.invoke('processClothingImage', { item_id: created.id });
           if (res.data?.error) throw new Error(res.data.error);
           ergebnisse.push(res.data.item);
@@ -161,7 +180,11 @@ export default function Upload() {
                 </span>
               </button>
               <p className="mt-4 text-center text-[11px] text-muted-foreground">
-                Deine Fotos werden privat gespeichert (stored privately).
+                Deine Fotos liegen im privaten Speicher und sind nur für dich sichtbar.
+              </p>
+              <p className="mt-2 text-center text-[11px] leading-relaxed text-muted-foreground">
+                Das Freistellen passiert direkt auf deinem Gerät. Beim allerersten Teil lädt die App dafür
+                einmalig ein Modell, das dauert einen Moment.
               </p>
             </div>
           )}

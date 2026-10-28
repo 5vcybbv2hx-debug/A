@@ -93,7 +93,7 @@ export default function ItemSheet({ item, open, onOpenChange, onChanged }) {
               uri={item.foto_freigestellt || item.foto_original}
               fittingType="fit"
               alt={item.name}
-              className="absolute inset-0 h-full w-full object-contain p-4 mix-blend-multiply"
+              className="absolute inset-0 h-full w-full object-contain p-4"
             />
             <button
               type="button"

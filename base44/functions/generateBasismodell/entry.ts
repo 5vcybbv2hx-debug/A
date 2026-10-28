@@ -13,8 +13,8 @@ export default async function (req) {
     if (!Array.isArray(foto_uris) || foto_uris.length === 0) {
       return Response.json({ error: 'Bitte mindestens ein Foto übergeben.' }, { status: 400 });
     }
-    if (foto_uris.length > 4) {
-      return Response.json({ error: 'Höchstens vier Fotos.' }, { status: 400 });
+    if (foto_uris.length > 6) {
+      return Response.json({ error: 'Höchstens sechs Fotos.' }, { status: 400 });
     }
 
     const base44 = createClientFromRequest(req);

@@ -68,10 +68,16 @@ export default function UploadReview({ items, onFinished }) {
             uri={current.foto_freigestellt || current.foto_original}
             fittingType="fit"
             alt={current.name}
-            className="absolute inset-0 h-full w-full object-contain p-4 mix-blend-multiply"
+            className="absolute inset-0 h-full w-full object-contain p-4"
           />
         </div>
         <div className="p-4">
+          {!current.foto_freigestellt && (
+            <p className="mb-3 rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-[11px] leading-relaxed text-destructive">
+              Für dieses Teil ist kein freigestelltes Bild entstanden. Es lässt sich speichern, sieht in der
+              Anprobe aber noch nicht sauber aus – am besten später neu aufnehmen.
+            </p>
+          )}
           <p className="mb-4 text-[11px] leading-relaxed text-muted-foreground">
             Das ist mein Vorschlag. Ändere gern alles, was nicht passt.
           </p>

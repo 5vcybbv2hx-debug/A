@@ -18,7 +18,7 @@ export default function OutfitCollage({ items = [], className, count = 4 }) {
             uri={item.foto_freigestellt || item.foto_original}
             fittingType="fit"
             alt={item.name}
-            className="absolute inset-0 h-full w-full object-contain p-1.5 mix-blend-multiply"
+            className="absolute inset-0 h-full w-full object-contain p-1.5"
           />
         </div>
       ))}

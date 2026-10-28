@@ -22,7 +22,7 @@ export default function BasismodellSection({ modelle, onChanged }) {
   };
 
   const generieren = async (files) => {
-    const liste = Array.from(files).slice(0, 3);
+    const liste = Array.from(files).slice(0, 6);
     if (liste.length === 0) return;
     setBusy(true);
     setFehler('');
@@ -120,6 +120,11 @@ export default function BasismodellSection({ modelle, onChanged }) {
           Eigenes Foto nutzen
         </button>
       </div>
+
+      <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+        Für die Varianten 4 bis 6 Fotos auswählen. Je ähnlicher Licht, Abstand und Winkel, desto stimmiger
+        das Ergebnis – ein zusammengesetztes Bild aus verschiedenen Fotos wird bewusst nicht erzeugt.
+      </p>
 
       {fehler && (
         <p className="mt-3 rounded-xl border border-destructive/30 bg-destructive/5 px-3 py-2 text-[12px] text-destructive">

@@ -20,7 +20,7 @@ const ORDER = [
   ['accessory', 'z-[38]'],
 ];
 
-function Layers({ items, blend }) {
+function Layers({ items }) {
   return (
     <>
       {ORDER.map(([slot, z]) => {
@@ -35,8 +35,7 @@ function Layers({ items, blend }) {
             className={cn(
               'absolute object-contain',
               ZONES[slot],
-              z,
-              'mix-blend-multiply'
+              z
             )}
           />
         );
@@ -107,7 +106,7 @@ export default function OutfitStage({
               </button>
             </div>
           )}
-          <Layers items={items} blend />
+          <Layers items={items} />
         </>
       )}
 
